@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">PetSafeAndroid</string>
+    <string name="app_name">Pet Pal</string>
+    <string name="connection_fail">Connection Failed</string>
+    <string name="firebase_auth_fail">Firebase authentication failed. Database unavailable. Images and results will not be added to Database.</string>
+    <string name="google_sign_in_fail">"Could not sign into Google account</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="file_create_fail">Failed to create an image file</string>
+
 </resources>
