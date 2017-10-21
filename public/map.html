@@ -42,16 +42,13 @@
     <script>
       var markerClusterer;
       function initMap() {
-
         //Starting locations
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 2,
           center: {lat: 0, lng: 0} //-28.024, lng: 140.887}
         });
-
         // Create an array of alphabetical characters used to label the markers.
         var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
         // Add some markers to the map.
         // Note: The code uses the JavaScript Array.prototype.map() method to
         // create an array of markers based on a given "locations" array.
@@ -62,7 +59,6 @@
             label: labels[i % labels.length]
           });
         });
-
         // Add a marker clusterer to manage the markers.
         markerClusterer = new MarkerClusterer(map, markers,
             {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
@@ -73,13 +69,14 @@
         var newcoord = data.val();
         console.log("latitude: " + newcoord.latitude);
         console.log("longitude: " + newcoord.longitude);
-
         var markerObj = new google.maps.Marker({
-            position: {lat: newcoord.latitude, lng: newcoord.longitude},
+            //position: {lat: newcoord.latitude, lng: newcoord.longitude},
+            position: new google.maps.LatLng(newcoord.latitude, newcoord.longitude),
+
             //If error persists, remove next line:
-            label: newcoord.animal.charAt(0)
+            //label: newcoord.animal.charAt(0)
             //And replace with this line:
-            //label: newcoord.animal
+            label: newcoord.animal
           });
         
         markerClusterer.addMarker(markerObj);
