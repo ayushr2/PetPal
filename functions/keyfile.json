@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "firebase-petsafe",
+  "private_key_id": "92f621c6c3331c7201e05010c1b63297a731e164",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCd25y0/s20tzgl\n6kPOViQeeRTImfLMA+4tYNDvQP41x803KasUhbQHhTSJ/rEnf9MLm6DDf1nOw7LF\n386jmsoPipU8FiEmnfWhW7YERiqKxnSAgwt7Ddp/CzRmwqUQ6HNmtkZ8y7c3nV4L\nt/Tsf6Rfw0fBpCj4GyOL/4zn8vdRmHV8YD7Z7/QILqSqZR9JtbzfnN7RtVtt1zLS\noTv72AylGwO1TBHGZtboDYGAjNaGWj6HvtpSRlWqXJTuqTDYFFsfQn0D5uVIgjEq\nwvVWcagg460TCPqAoR04vzqWk7sDtEGq7v9Mp1rYlc/QeT1txhD2Z8B5c/LeA2YG\nN78b5WVrAgMBAAECggEAAu1MrrcfcE+KDSXsA5o+9DOxiiCp9aodqJ4SxwTmUcVL\nzaSKUAiZ9HO+AXsFT41ZXUM8TAkDTMf90MPGwet/qKHHWkRcxqmyIWpLvzDf3rqG\n9CUPOZphp+5ja9kFv4ECjBqAHGtDO+xBOf1mCgaPMS6z7hK8UbwLFjBIWA/+EaIM\nbCWBL+dSrl8gqxI2tBli8ThuYGKl3KBA4nZ07cWAda7fh4Cz/RK8FwZoLiaYMJ+c\n9JFvSyUkQQttLEFwVOHQLS5S8ABWHqtOR9sxPW2YHXRn8CG0q8nurRtEMDMD2tit\nNdSIp5O4SmV2zxSXwQZejZCp+XqfPXORClbb79dPzQKBgQDRtIwADN1bN0LUpbO1\nXyAo5XSo3l+jipL9LjpBEQUa9k/ZRYj/vS1IBbDpye5vgiUutWAAg5foRDT0tdu9\nfYIBxCr1MWAG8hh/creL6yVjHfX8+Y89A1LCcnffXT3wWKDnhvDV8mDPuA27PxMP\ne2mZvz6p2b/8OLO1hD8o8WE/fwKBgQDAtOtQTlojC5kdrcf3xbKtTivOjMSnksQV\nnB07r3/tHUpdudWBhyirjQpsRJaJK10AnYPsQmNqKiVVOEmWZeHdaZfN1kLd2EWc\nIEwRQ2ArOqV8TTwyGMtcIr17AeLKB8OZ7/DbfIk2qKQyXlULcTGu4acYoVU4iPtR\nTevjXqzQFQKBgCaRMvJLa2Z8OlFLjEp+DTcYRCVOiH5WXQQtPU98Jtk3laXa8QA/\ntZU6XrgQiEZ/xADcIKTXjteLu8WJsLkf3QogHtprU0LTwYem/HTCMWUSPIxjBWHu\nO4lBbiRpTJvoYOdT3PUsF3v8WKIoToQZaWl6T7cDMhjcAMkQYmFQS1dXAoGARdmO\nLeaon2lVz78s62+ai1z5Xf4CTidRse+LXRYJDZ5/VSfF7xRZto0CCSp3UjMIm+98\nYQfTVyj9rT0g10YIr6PVpYOTayw4VxYR3HQKiMDSORMZzaLVG4lwGwUc+lQEH2ks\nabJjXg+UrLkqpGIcOyKJ2dCovjxQtDDFXv3zL90CgYEAtckHVBDvYyqJu7RKQw3w\n2wE/HPV3HJroBjHihPAlfUVy5aRI2DJXL9Y7NYscX2I8AZu4mhfkSK0UyNUXv7KL\nQ0v0Z4GN/HGOUPhuNQo75uwNR1wzgY30AGYuF+pcHxNMDYzF2p3EflIYTrN5WT3B\ntlObdAMKTjS8jfRCUYWwU2w=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-petsafe@appspot.gserviceaccount.com",
+  "client_id": "104610434656001130119",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-petsafe%40appspot.gserviceaccount.com"
+}
