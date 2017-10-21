@@ -5,6 +5,7 @@ package com.hackharvard.petsafeandroid;
  */
 
 public class Post {
+    public String imageLocation;
     public String userEmail;
     public double latitude;
     public double longitude;
@@ -14,10 +15,11 @@ public class Post {
 
     }
 
-    public Post(String userEmail, double xCord, double yCord, String image) {
+    public Post(String userEmail, double xCord, double yCord, String downloadUrl, String imageLocation) {
         this.userEmail = userEmail;
         this.latitude = xCord;
         this.longitude = yCord;
-        this.image = image;
+        this.image = downloadUrl;
+        this.imageLocation = imageLocation;
     }
 }

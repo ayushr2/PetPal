@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -15,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
@@ -24,8 +24,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -37,7 +42,7 @@ import java.util.Date;
  * Created by ayushranjan on 20/10/17.
  */
 
-public class GetImageActivity extends AppCompatActivity{
+public class GetImageActivity extends AppCompatActivity {
     private static final String PACKAGE_NAME = "com.hackharvard.petsafeandroid";
     private static final int CAMERA_CODE = 1470;
     private static final int MY_PERMISSION_REQUEST_READ_COARSE_LOCATION = 102;
@@ -171,7 +176,6 @@ public class GetImageActivity extends AppCompatActivity{
                 requestPermission();
             else
                 saveResultToDB();
-        } else {
         }
     }
 
@@ -179,16 +183,7 @@ public class GetImageActivity extends AppCompatActivity{
         public void onLocationChanged(Location location) {
             longitude = location.getLongitude();
             latitude = location.getLatitude();
-
-            String imageEncoded = encodeTobase64(BitmapFactory.decodeFile(pathToPhoto));
-            SharedPreferences setting = getSharedPreferences(Constants.PREF_NAME, 0);
-            String email = setting.getString(Constants.EMAIL, "");
-            Post post = new Post(email, latitude, longitude, imageEncoded);
-            String node = pathToPhoto.substring(pathToPhoto.lastIndexOf("/") + 1,
-                    pathToPhoto.lastIndexOf('.')) + email;
-            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-            DatabaseReference postRef = firebaseDatabase.getReference("posts").child(node.replace('.','_'));
-            postRef.setValue(post);
+            pushImageToStorage();
         }
 
         @Override
@@ -217,8 +212,60 @@ public class GetImageActivity extends AppCompatActivity{
             return;
         }
 
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
+    }
+
+    /**
+     * Pushes the image file already created by previous activity to database and if it has to be
+     * deleted, deletes it upon completion
+     *
+     */
+    private void pushImageToStorage() {
+        StorageReference imageStorageRef = FirebaseStorage.getInstance()
+                .getReference()
+                .child("images")
+                .child(pathToPhoto.substring(pathToPhoto.lastIndexOf("/") + 1));
+
+        imageStorageRef.putFile(Uri.fromFile(new File(pathToPhoto)))
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        String downloadUrl = taskSnapshot.getDownloadUrl().toString();
+                        String storageLocation = pathToPhoto.substring(pathToPhoto.lastIndexOf("/") + 1);
+                        Toast.makeText(getApplicationContext(), downloadUrl, Toast.LENGTH_SHORT).show();
+
+                        deleteFile(pathToPhoto);
+                        SharedPreferences setting = getSharedPreferences(Constants.PREF_NAME, 0);
+                        String email = setting.getString(Constants.EMAIL, "");
+                        Post post = new Post(email, latitude, longitude, downloadUrl, storageLocation);
+                        String node = pathToPhoto.substring(pathToPhoto.lastIndexOf("/") + 1,
+                                pathToPhoto.lastIndexOf('.')) + email;
+                        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                        DatabaseReference postRef = firebaseDatabase.getReference("posts").child(node.replace('.', '_'));
+                        postRef.setValue(post);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Toast.makeText(getApplicationContext(),
+                                getApplicationContext().getString(R.string.firebase_upload_fail),
+                                Toast.LENGTH_SHORT).show();
+                        exception.printStackTrace();
+                    }
+                });
+    }
+
+    /**
+     * This method deletes the file gives through path
+     *
+     * @param pathToPhoto path to photo
+     */
+    public boolean deleteFile(String pathToPhoto) {
+        File fileToDelete = new File(pathToPhoto);
+        fileToDelete.delete();
+        return false;
     }
 
     @Override

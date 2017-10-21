@@ -7,5 +7,6 @@
     <string name="file_create_fail">Failed to create an image file</string>
     <string name="operation_cancel">Cancelled operation</string>
     <string name="image_get_fail">Sorry! Failed to get image</string>
+    <string name="firebase_upload_fail">Upload of image to storage failed</string>
 
 </resources>

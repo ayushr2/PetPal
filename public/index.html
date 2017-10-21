@@ -46,7 +46,7 @@ limitations under the License.
   <!-- Import and configure the Firebase SDK -->
   <!-- These scripts are made available when the app is served or deployed on Firebase Hosting -->
   <!-- If you do not serve/host your project using Firebase Hosting see https://firebase.google.com/docs/web/setup -->
-  
+
   <!--COMMENTED ON PURPOSE
   <script src="/__/firebase/4.0.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
@@ -69,7 +69,7 @@ limitations under the License.
    };
     firebase.initializeApp(config);
   </script>
-  
+
   <!-- Change ../.. to __ if error doesnt go, in next 2 lines -->
   <!--
   <script src="/../../firebase/4.0.0/firebase-auth.js"></script>
@@ -180,15 +180,15 @@ limitations under the License.
       // [END authstatelistener]
       document.getElementById('signout').addEventListener('click', handleSignOut, false);
     }
-	  
+
 	  function firebaseTesting() {
 		  var newPostKey = firebase.database().ref().child('posts');
-		  
+
 	  }
-    
+
 	  window.onload = function() {
-      //initApp();
-		firebaseTesting();
+    initApp();
+		//firebaseTesting();
     };
   </script>
 </head>
