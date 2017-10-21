@@ -5,5 +5,7 @@
     <string name="google_sign_in_fail">"Could not sign into Google account</string>
     <string name="sign_out">Sign Out</string>
     <string name="file_create_fail">Failed to create an image file</string>
+    <string name="operation_cancel">Cancelled operation</string>
+    <string name="image_get_fail">Sorry! Failed to get image</string>
 
 </resources>
