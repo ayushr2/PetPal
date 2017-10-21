@@ -1,0 +1,9 @@
+// These rules require authentication
+{
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+
+//Refer other rules at: https://firebase.google.com/docs/database/security/quickstart?authuser=0
