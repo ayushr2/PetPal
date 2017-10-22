@@ -78,13 +78,23 @@ limitations under the License.
   -->
 
   <script type="text/javascript">
-    // [START googlecallback]	  
-	  var markerClusterer;
-	  //var map;
+    // [START googlecallback]
+	var markerClusterer;
+	var set_lat = new Set();
+	var set_long = new Set();
 	  
 	  function geocodeLatLng(geocoder, newcoord, map) {
         var latlng = {lat: parseFloat(newcoord.latitude), lng: parseFloat(newcoord.longitude)};
-		var markerObj = new google.maps.Marker({
+		if (set_lat.has(newcoord.latitude) && set_long.has(newcoord.longitude))
+			return;
+		 
+		 set_long.add(newcoord.longitude);
+		 set_lat.add(newcoord.latitude);
+		  
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+				var markerObj = new google.maps.Marker({
 					   //position: {lat: newcoord.latitude, lng: newcoord.longitude},
 					   position: new google.maps.LatLng(newcoord.latitude, newcoord.longitude),
 					   map: map,
@@ -93,14 +103,10 @@ limitations under the License.
 					   //And replace with this line:
 					   label: newcoord.animal
 					 });
-		markerClusterer.addMarker(markerObj);
-		console.log(latlng);
-		console.log(map);
-
-        geocoder.geocode({'location': latlng}, function(results, status) {
-          if (status === 'OK') {
-            if (results[0]) {
+				markerClusterer.addMarker(markerObj);
               	var address = results[0].formatted_address;
+				console.log(address);
+				console.log(markerObj);
 				var infowindow = new google.maps.InfoWindow({
 					 content: "<p>" + address + "</p><img src=\""+newcoord.image+"\">"
 				  });
@@ -132,7 +138,6 @@ limitations under the License.
 		  zoom: 2,
 		  center: {lat: 0, lng: 0} //-28.024, lng: 140.887}
 		});
-
 		markerClusterer = new MarkerClusterer(map, null, {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 		var geocoder = new google.maps.Geocoder;
 	    var coords = firebase.database().ref("posts");
@@ -141,7 +146,6 @@ limitations under the License.
 		    geocodeLatLng(geocoder, newcoord, map);
 		});
 	  }
-
     function onSignIn(googleUser) {
       console.log('Google Auth Response', googleUser);
       // We need to register an Observer on Firebase Auth to make sure auth is initialized.
@@ -253,7 +257,6 @@ limitations under the License.
       // [END authstatelistener]
       document.getElementById('signout').addEventListener('click', handleSignOut, false);
     }
-
 	window.onload = function() {
     	initApp();
     };
