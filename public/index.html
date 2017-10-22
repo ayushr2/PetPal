@@ -28,6 +28,7 @@ limitations under the License.
   <!-- **********************************************
        * TODO(DEVELOPER): Use your Client ID below. *
        ********************************************** -->
+  <link rel="stylesheet" href="main.css">
   <meta name="google-signin-client_id" content="251609788883-eb4e4qib99cjarodli4kvbffj7qv60h2.apps.googleusercontent.com">
   <!-- May present error, next line -->
   <meta name="google-signin-cookiepolicy" content="http://localhost">
@@ -67,7 +68,7 @@ limitations under the License.
      storageBucket: "firebase-petsafe.appspot.com",
      messagingSenderId: "251609788883"
    };
-    firebase.initializeApp(config);
+   firebase.initializeApp(config);
   </script>
 
   <!-- Change ../.. to __ if error doesnt go, in next 2 lines -->
@@ -77,7 +78,45 @@ limitations under the License.
   -->
 
   <script type="text/javascript">
-    // [START googlecallback]
+    // [START googlecallback]	  
+	var markerClusterer;
+	  
+	  function initMap() {
+		var map = new google.maps.Map(document.getElementById('map'), {
+		  zoom: 2,
+		  center: {lat: 0, lng: 0} //-28.024, lng: 140.887}
+		});
+
+		markerClusterer = new MarkerClusterer(map, null, {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+		
+	  var coords = firebase.database().ref("posts");
+	  coords.on("child_added", function(data, prevChildKey) {
+		  var newcoord = data.val();
+		  console.log("latitude: " + newcoord.latitude);
+		  console.log("longitude: " + newcoord.longitude);
+
+		  var contentString = 'popup';
+
+		  var infowindow = new google.maps.InfoWindow({
+			 content: "<img src=\""+newcoord.image+"\">"
+		  });
+
+		  var markerObj = new google.maps.Marker({
+			   //position: {lat: newcoord.latitude, lng: newcoord.longitude},
+				   position: new google.maps.LatLng(newcoord.latitude, newcoord.longitude),
+				   map: map,
+				   //If error persists, remove next line:
+				   //label: newcoord.animal.charAt(0)
+				   //And replace with this line:
+				   label: newcoord.animal
+				 });
+			  markerClusterer.addMarker(markerObj);
+
+			  markerObj.addListener('mouseover', function() {
+				infowindow.open(map, markerObj);
+			  });
+		  });
+	  }
 
     function onSignIn(googleUser) {
       console.log('Google Auth Response', googleUser);
@@ -116,6 +155,8 @@ limitations under the License.
           console.log('User already signed-in Firebase.');
         }
       });
+		
+		initMap();
     }
     // [END googlecallback]
     /**
@@ -166,14 +207,22 @@ limitations under the License.
           // [START_EXCLUDE]
           document.getElementById('quickstart-sign-in-status').textContent = 'Signed in';
           document.getElementById('signout').disabled = false;
-          document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
+		  document.getElementById('google-sign-in-button').style.visibility = 'hidden';
+		  document.getElementById('welcome-text').innerHTML = '';
+		  document.getElementById('map').style.visibility = 'visible';
+		  initMap();
+		  //onSignIn(user);
+          //	document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
           // [END_EXCLUDE]
         } else {
           // User is signed out.
           // [START_EXCLUDE]
-          document.getElementById('quickstart-sign-in-status').textContent = 'Signed out';
+		  document.getElementById('map').style.visibility = 'hidden';
+		  document.getElementById('welcome-text').innerHTML = 'Sign in with your Google account below.';
+		  document.getElementById('google-sign-in-button').style.visibility = 'visible';
+          document.getElementById('quickstart-sign-in-status').textContent = 'Signed out. Please signin above to get access to the map.';
           document.getElementById('signout').disabled = true;
-          document.getElementById('quickstart-account-details').textContent = 'null';
+          //	document.getElementById('quickstart-account-details').textContent = 'null';
             // [END_EXCLUDE]
         }
       });
@@ -181,14 +230,8 @@ limitations under the License.
       document.getElementById('signout').addEventListener('click', handleSignOut, false);
     }
 
-	  function firebaseTesting() {
-		  var newPostKey = firebase.database().ref().child('posts');
-
-	  }
-
-	  window.onload = function() {
-    initApp();
-		//firebaseTesting();
+	window.onload = function() {
+    	initApp();
     };
   </script>
 </head>
@@ -210,26 +253,30 @@ limitations under the License.
       <!-- Container for the demo -->
       <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
         <div class="mdl-card__title mdl-color--light-blue-600 mdl-color-text--white">
-          <h2 class="mdl-card__title-text">LogIn to access homeless pets' data.</h2>
+          <h2 class="mdl-card__title-text">LogIn for client organisation.</h2>
         </div>
         <div class="mdl-card__supporting-text mdl-color-text--grey-600">
-          <p>Sign in with your Google account below.</p>
+          <p id="welcome-text"></p>
           <!-- [START google_button] -->
-          <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+          <div id="google-sign-in-button" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
           <!-- [END google_button] -->
           <br>
           <button disabled class="mdl-button mdl-js-button mdl-button--raised" id="signout" name="signout">Sign Out</button>
 
           <div class="quickstart-user-details-container">
-            Firebase sign-in status: <span id="quickstart-sign-in-status">Unknown</span>
-            <div>Firebase auth <code>currentUser</code> object value:</div>
-            <pre><code id="quickstart-account-details">null</code></pre>
+            You are: <span id="quickstart-sign-in-status">Unknown</span>
+            <!--  <pre><code id="quickstart-account-details">null</code></pre>  -->
           </div>
         </div>
       </div>
-
     </div>
   </main>
+  <div id="map" class="map-class"></div>
 </div>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIY2gIJR5z8Io9Ui_iLixYvxAhUmkQvYI&callback=initMap">
+</script>
+
 </body>
 </html>

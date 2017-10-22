@@ -1,0 +1,12 @@
+@charset "UTF-8";
+/* CSS Document */
+
+.quickstart-user-details-container{
+	margin-top: 10px;
+}
+
+.map-class {
+	height: 60%;
+	width: 100%;
+	align-content: center;
+}
