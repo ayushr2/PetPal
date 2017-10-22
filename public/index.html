@@ -108,7 +108,7 @@ limitations under the License.
 				console.log(address);
 				console.log(markerObj);
 				var infowindow = new google.maps.InfoWindow({
-					 content: "<p>" + address + "</p><img src=\""+newcoord.image+"\">"
+					 content: "<p>" + address + "</p><img height=\"75\" width=\"75\" src=\""+newcoord.image+"\">"
 				  });
 				markerObj.addListener('mouseover', function() {
 					infowindow.open(map, markerObj);
