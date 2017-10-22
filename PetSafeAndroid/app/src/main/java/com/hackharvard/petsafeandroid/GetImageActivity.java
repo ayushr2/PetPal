@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +32,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -46,18 +46,18 @@ public class GetImageActivity extends AppCompatActivity {
     private static final int CAMERA_CODE = 1470;
     private static final int MY_PERMISSION_REQUEST_READ_COARSE_LOCATION = 102;
     private static final int MY_CAMERA_REQUEST_CODE = 1469;
-    private Button captureButton;
     private String pathToPhoto;
     private double latitude;
     private double longitude;
+    private LottieAnimationView animationView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.get_image_activity);
-        captureButton = findViewById(R.id.button);
 
-        captureButton.setOnClickListener(new View.OnClickListener() {
+        animationView = (LottieAnimationView) findViewById(R.id.button);
+        animationView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getImageFromCamera();
