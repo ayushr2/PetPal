@@ -1,3 +1,9 @@
+## Contributors
+The following members contributed to this project: 
+* Ayush Ranjan
+* Aditya Ramesh
+* Satyam Jindal
+
 ## Inspiration
 We noticed that several organizations across the country that focused on animal rescue didn't have a standard app where they could locate all unsheltered animals, however with PetPal, things are about to change. It allows anyone, anywhere to send pictures of homeless animals right into the open database from which these rescue organizations could access them. It's smart, user-friendly, easy-to-learn and implement, and gives us an opportunity to contribute towards the welfare of the community.
 
