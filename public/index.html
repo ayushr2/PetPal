@@ -209,6 +209,8 @@ limitations under the License.
      * Handle the sign out button press.
      */
     function handleSignOut() {
+	  set_lat = new Set();
+	  set_long = new Set();
       var googleAuth = gapi.auth2.getAuthInstance();
       googleAuth.signOut().then(function() {
         firebase.auth().signOut();
