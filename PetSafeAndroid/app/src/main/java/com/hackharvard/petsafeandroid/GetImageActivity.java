@@ -20,7 +20,6 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -34,6 +33,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -230,7 +230,14 @@ public class GetImageActivity extends AppCompatActivity {
                         deleteFile(pathToPhoto);
                         SharedPreferences setting = getSharedPreferences(Constants.PREF_NAME, 0);
                         String email = setting.getString(Constants.EMAIL, "");
-                        Post post = new Post(email, latitude, longitude, downloadUrl, storageLocation);
+                        String name = setting.getString(Constants.NAME, "");
+
+                        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG);
+                        Date today = new Date();
+                        String strDate = dateFormat.format(today);
+
+
+                        Post post = new Post(email, latitude, longitude, downloadUrl, storageLocation, name, strDate);
                         String node = pathToPhoto.substring(pathToPhoto.lastIndexOf("/") + 1,
                                 pathToPhoto.lastIndexOf('.')) + email;
                         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();

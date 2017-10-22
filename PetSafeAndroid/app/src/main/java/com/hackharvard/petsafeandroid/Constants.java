@@ -8,4 +8,5 @@ public class Constants {
     public static final String PREF_NAME = "settings";
     public static final String EMAIL = "email";
     public final static String FILE_PATH = "FILE_PATH";
+    public static final String NAME = "name";
 }

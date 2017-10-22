@@ -85,6 +85,7 @@ limitations under the License.
 	  
 	  function geocodeLatLng(geocoder, newcoord, map) {
         var latlng = {lat: parseFloat(newcoord.latitude), lng: parseFloat(newcoord.longitude)};
+		  console.log(latlng);
 		//if (set_lat.has(newcoord.latitude) && set_long.has(newcoord.longitude))
 			//return;
 		 
@@ -92,9 +93,7 @@ limitations under the License.
 		 //set_lat.add(newcoord.latitude);
 		  
         geocoder.geocode({'location': latlng}, function(results, status) {
-          if (status === 'OK') {
-            if (results[0]) {
-				var markerObj = new google.maps.Marker({
+			var markerObj = new google.maps.Marker({
 					   //position: {lat: newcoord.latitude, lng: newcoord.longitude},
 					   position: new google.maps.LatLng(newcoord.latitude, newcoord.longitude),
 					   map: map,
@@ -103,27 +102,36 @@ limitations under the License.
 					   //And replace with this line:
 					   label: newcoord.animal
 					 });
+          if (status === 'OK') {
+            if (results[0]) {
 				markerClusterer.addMarker(markerObj);
               	var address = results[0].formatted_address;
 				console.log(address);
-				console.log(markerObj);
+				var animal_found;
+				if (newcoord.animal === null) {
+					animal_found = "Unknown";
+				} else {
+					animal_found = newcoord.animal;
+				}
 				var infowindow = new google.maps.InfoWindow({
-					 content: "<p>" + address + "</p><img height=\"75\" width=\"75\" src=\""+newcoord.image+"\">"
+					 content: "<b>Animal</b>: " + newcoord.animal + "<br><b>Address</b>: " + address + "<br><b>By</b>: " + newcoord.name + "<br><b>On</b>: " + newcoord.date + "<p style=\"text-align:center\"><br><img height=\"150\" width=\"150\" src=\""+newcoord.image+"\"></p>"
 				  });
+				
 				markerObj.addListener('mouseover', function() {
 					infowindow.open(map, markerObj);
 				});
             } else {
 				var infowindow = new google.maps.InfoWindow({
-					 content: "<p>Address not foundd!</p><img src=\""+newcoord.image+"\">"
+					 content: "<b>Animal</b>: " + newcoord.animal + "<br><b>Address</b>: " + address + "<br><b>By</b>: " + newcoord.name + "<br><b>On</b>: " + newcoord.date + "<p style=\"text-align:center\"><br><img height=\"150\" width=\"150\" src=\""+newcoord.image+"\"></p>"
 				  });
 				markerObj.addListener('mouseover', function() {
 					infowindow.open(map, markerObj);
 				});
 			}
           } else {
+			  console.log(status);
 			var infowindow = new google.maps.InfoWindow({
-					 content: "<p>Address not found!</p><img src=\""+newcoord.image+"\">"
+					 content: "<b>Animal</b>: " + newcoord.animal + "<br><b>Address</b>: " + address + "<br><b>By</b>: " + newcoord.name + "<br><b>On</b>: " + newcoord.date + "<p style=\"text-align:center\"><br><img height=\"150\" width=\"150\" src=\""+newcoord.image+"\"></p>"
 				  });
 				markerObj.addListener('mouseover', function() {
 					infowindow.open(map, markerObj);

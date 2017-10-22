@@ -62,6 +62,7 @@ public class LogInActivity extends AppCompatActivity
     private SharedPreferences.Editor editor;
     private SharedPreferences settings;
     private String userEmail;
+    private String userName;
 
     /**
      * Initialises all components and sets button listeners. Check if any users are already signed in.
@@ -200,6 +201,7 @@ public class LogInActivity extends AppCompatActivity
             userDisplayName = acct.getDisplayName();
             userEmail = acct.getEmail();
             editor.putString(Constants.EMAIL, userEmail);
+            editor.putString(Constants.NAME, userDisplayName);
             editor.commit();
             updateUI(true);
             firebaseAuthWithGoogle(acct);
