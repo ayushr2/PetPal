@@ -69,18 +69,32 @@
         var newcoord = data.val();
         console.log("latitude: " + newcoord.latitude);
         console.log("longitude: " + newcoord.longitude);
-        var markerObj = new google.maps.Marker({
-            //position: {lat: newcoord.latitude, lng: newcoord.longitude},
-            position: new google.maps.LatLng(newcoord.latitude, newcoord.longitude),
 
-            //If error persists, remove next line:
-            //label: newcoord.animal.charAt(0)
-            //And replace with this line:
-            label: newcoord.animal
-          });
-        
-        markerClusterer.addMarker(markerObj);
+      var contentString = 'popup';
+
+      var infowindow = new google.maps.InfoWindow({
+         content: "<img src=\""+newcoord.image+"\">"
       });
+
+      
+
+      var markerObj = new google.maps.Marker({
+           //position: {lat: newcoord.latitude, lng: newcoord.longitude},
+           position: new google.maps.LatLng(newcoord.latitude, newcoord.longitude),
+           map: map,
+           //If error persists, remove next line:
+           //label: newcoord.animal.charAt(0)
+           //And replace with this line:
+           label: newcoord.animal
+         });
+      markerClusterer.addMarker(markerObj);
+
+      markerObj.addListener('mouseover', function() {
+        infowindow.open(map, markerObj);
+      });
+      });
+
+      
     </script>
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
     </script>
