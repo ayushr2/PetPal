@@ -80,16 +80,16 @@ limitations under the License.
   <script type="text/javascript">
     // [START googlecallback]
 	var markerClusterer;
-	var set_lat = new Set();
-	var set_long = new Set();
+	//var set_lat = new Set();
+	//var set_long = new Set();
 	  
 	  function geocodeLatLng(geocoder, newcoord, map) {
         var latlng = {lat: parseFloat(newcoord.latitude), lng: parseFloat(newcoord.longitude)};
-		if (set_lat.has(newcoord.latitude) && set_long.has(newcoord.longitude))
-			return;
+		//if (set_lat.has(newcoord.latitude) && set_long.has(newcoord.longitude))
+			//return;
 		 
-		 set_long.add(newcoord.longitude);
-		 set_lat.add(newcoord.latitude);
+		 //set_long.add(newcoord.longitude);
+		 //set_lat.add(newcoord.latitude);
 		  
         geocoder.geocode({'location': latlng}, function(results, status) {
           if (status === 'OK') {
@@ -209,8 +209,8 @@ limitations under the License.
      * Handle the sign out button press.
      */
     function handleSignOut() {
-	  set_lat = new Set();
-	  set_long = new Set();
+	  //set_lat = new Set();
+	  //set_long = new Set();
       var googleAuth = gapi.auth2.getAuthInstance();
       googleAuth.signOut().then(function() {
         firebase.auth().signOut();

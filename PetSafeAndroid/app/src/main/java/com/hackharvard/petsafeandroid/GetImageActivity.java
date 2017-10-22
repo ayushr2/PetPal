@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -19,7 +18,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -149,16 +148,6 @@ public class GetImageActivity extends AppCompatActivity {
         return image;
     }
 
-    public static String encodeTobase64(Bitmap image) {
-        Bitmap immagex = image;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        immagex.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] b = baos.toByteArray();
-        String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
-        return imageEncoded;
-    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Return if result is not okay
@@ -181,24 +170,26 @@ public class GetImageActivity extends AppCompatActivity {
 
     private final LocationListener locationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
-            longitude = location.getLongitude();
-            latitude = location.getLatitude();
-            pushImageToStorage();
+            if (pathToPhoto != null) {
+                longitude = location.getLongitude();
+                latitude = location.getLatitude();
+                pushImageToStorage();
+            }
         }
 
         @Override
         public void onStatusChanged(String s, int i, Bundle bundle) {
-
+            Log.d("status", s);
         }
 
         @Override
         public void onProviderEnabled(String s) {
-
+            Log.d("provider", s);
         }
 
         @Override
         public void onProviderDisabled(String s) {
-
+            Log.d("disable", s);
         }
     };
 
@@ -213,7 +204,9 @@ public class GetImageActivity extends AppCompatActivity {
         }
 
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+//        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, req, this);
     }
 
     /**
@@ -233,7 +226,6 @@ public class GetImageActivity extends AppCompatActivity {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         String downloadUrl = taskSnapshot.getDownloadUrl().toString();
                         String storageLocation = pathToPhoto.substring(pathToPhoto.lastIndexOf("/") + 1);
-                        Toast.makeText(getApplicationContext(), downloadUrl, Toast.LENGTH_SHORT).show();
 
                         deleteFile(pathToPhoto);
                         SharedPreferences setting = getSharedPreferences(Constants.PREF_NAME, 0);
@@ -249,9 +241,6 @@ public class GetImageActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(getApplicationContext(),
-                                getApplicationContext().getString(R.string.firebase_upload_fail),
-                                Toast.LENGTH_SHORT).show();
                         exception.printStackTrace();
                     }
                 });
@@ -265,6 +254,7 @@ public class GetImageActivity extends AppCompatActivity {
     public boolean deleteFile(String pathToPhoto) {
         File fileToDelete = new File(pathToPhoto);
         fileToDelete.delete();
+        pathToPhoto = null;
         return false;
     }
 
