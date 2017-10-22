@@ -79,7 +79,53 @@ limitations under the License.
 
   <script type="text/javascript">
     // [START googlecallback]	  
-	var markerClusterer;
+	  var markerClusterer;
+	  //var map;
+	  
+	  function geocodeLatLng(geocoder, newcoord, map) {
+        var latlng = {lat: parseFloat(newcoord.latitude), lng: parseFloat(newcoord.longitude)};
+		var markerObj = new google.maps.Marker({
+					   //position: {lat: newcoord.latitude, lng: newcoord.longitude},
+					   position: new google.maps.LatLng(newcoord.latitude, newcoord.longitude),
+					   map: map,
+					   //If error persists, remove next line:
+					   //label: newcoord.animal.charAt(0)
+					   //And replace with this line:
+					   label: newcoord.animal
+					 });
+		markerClusterer.addMarker(markerObj);
+		console.log(latlng);
+		console.log(map);
+
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              	var address = results[0].formatted_address;
+				var infowindow = new google.maps.InfoWindow({
+					 content: "<p>" + address + "</p><img src=\""+newcoord.image+"\">"
+				  });
+				markerObj.addListener('mouseover', function() {
+					infowindow.open(map, markerObj);
+				});
+            } else {
+				var infowindow = new google.maps.InfoWindow({
+					 content: "<p>Address not foundd!</p><img src=\""+newcoord.image+"\">"
+				  });
+				markerObj.addListener('mouseover', function() {
+					infowindow.open(map, markerObj);
+				});
+			}
+          } else {
+			var infowindow = new google.maps.InfoWindow({
+					 content: "<p>Address not found!</p><img src=\""+newcoord.image+"\">"
+				  });
+				markerObj.addListener('mouseover', function() {
+					infowindow.open(map, markerObj);
+				});
+          }
+        });
+		  
+      }
 	  
 	  function initMap() {
 		var map = new google.maps.Map(document.getElementById('map'), {
@@ -88,34 +134,12 @@ limitations under the License.
 		});
 
 		markerClusterer = new MarkerClusterer(map, null, {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-		
-	  var coords = firebase.database().ref("posts");
-	  coords.on("child_added", function(data, prevChildKey) {
-		  var newcoord = data.val();
-		  console.log("latitude: " + newcoord.latitude);
-		  console.log("longitude: " + newcoord.longitude);
-
-		  var contentString = 'popup';
-
-		  var infowindow = new google.maps.InfoWindow({
-			 content: "<img src=\""+newcoord.image+"\">"
-		  });
-
-		  var markerObj = new google.maps.Marker({
-			   //position: {lat: newcoord.latitude, lng: newcoord.longitude},
-				   position: new google.maps.LatLng(newcoord.latitude, newcoord.longitude),
-				   map: map,
-				   //If error persists, remove next line:
-				   //label: newcoord.animal.charAt(0)
-				   //And replace with this line:
-				   label: newcoord.animal
-				 });
-			  markerClusterer.addMarker(markerObj);
-
-			  markerObj.addListener('mouseover', function() {
-				infowindow.open(map, markerObj);
-			  });
-		  });
+		var geocoder = new google.maps.Geocoder;
+	    var coords = firebase.database().ref("posts");
+	    coords.on("child_added", function(data, prevChildKey) {
+		    var newcoord = data.val();
+		    geocodeLatLng(geocoder, newcoord, map);
+		});
 	  }
 
     function onSignIn(googleUser) {
