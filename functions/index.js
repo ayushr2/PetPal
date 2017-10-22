@@ -3,17 +3,17 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
-let pets_available = new Set();
-pets_available.add('dog');
-pets_available.add('cat');
-pets_available.add('hamster');
-pets_available.add('fish');
-pets_available.add('rabbit');
-pets_available.add('mice');
-pets_available.add('bird');
-pets_available.add('snake');
-pets_available.add('iguana');
-pets_available.add('ferret');
+// let pets_available = new Set();
+// pets_available.add('dog');
+// pets_available.add('cat');
+// pets_available.add('hamster');
+// pets_available.add('fish');
+// pets_available.add('rabbit');
+// pets_available.add('mice');
+// pets_available.add('bird');
+// pets_available.add('snake');
+// pets_available.add('iguana');
+// pets_available.add('ferret');
 
 exports.detectPet = functions.database.ref('/posts/{pushId}/imageLocation')
     .onWrite(event => {
@@ -40,20 +40,22 @@ exports.detectPet = functions.database.ref('/posts/{pushId}/imageLocation')
       vision.detectLabels(storage.bucket('firebase-petsafe.appspot.com').file('images/' + imageBucketLocation))
       .then((results) => {
         const labels = results[0];
-        try {
-            labels.forEach((label) => {
-              if (pets_available.has(label)) {
-                return event.data.ref.parent.child('animal').set(label);
-                throw BreakException;
-              }
-            })
-          } catch (e) {
-            if (e !== BreakException) throw e;
-          }
+        console.log(labels[0]);
+        return_val = event.data.ref.parent.child('animal').set(labels[0]);
+        // try {
+        //     labels.forEach((label) => {
+        //       if (pets_available.has(label)) {
+        //         return event.data.ref.parent.child('animal').set(label);
+        //         throw BreakException;
+        //       }
+        //     })
+        //   } catch (e) {
+        //     if (e !== BreakException) throw e;
+        //   }
       })
       .catch((err) => {
         console.error('ERROR:', err);
     });
 
-    return null;
+    return return_val;
 });
